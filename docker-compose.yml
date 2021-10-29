@@ -25,6 +25,7 @@ services:
       - ./certs/fullchain.pem:/certs/fullchain.pem:ro
       - ./certs/privkey.pem:/certs/privkey.pem:ro
       - plex-cluster-proxy:/data
+      - ~/nginx/dhparam/dhparam-2048.pem:/data/phparam.pem
     ports:
       - 33400:33400
     restart: always
