@@ -1,0 +1,41 @@
+version: '3.2'
+
+services:
+
+  # The Home Plex server
+  # This assumes you have Plex Pass
+  plex:
+    image: elcrp96/plex-media-server:latest
+    container_name: plex
+    environment:
+      - VERSION=docker
+      - PUID=999
+      - PGID=995
+      - TZ=Europe/London
+    network_mode: host
+    volumes:
+      - /mnt/media/plex/:/config/Library/Application Support/Plex Media Server # Where you want your Plex Library/Config folder to be
+      - /mnt/media/transcode:/transcode # A path for transcoding
+      - /mnt/media/transcode/Sync+:/config/Library/Application Support/Plex Media Server/Cache/Transcode/Sync+ # To keep sync transcoding in the transcode folder
+      - /mnt/media/transcode/Sync:/config/Library/Application Support/Plex Media Server/Cache/Transcode/Sync   # To keep sync transcoding in the transcode folder
+      - /mnt/media:/mnt/media # Media folder
+    restart: unless-stopped
+
+  resilio-sync:
+    image: lscr.io/linuxserver/resilio-sync
+    container_name: resilio-sync
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /path/to/config:/config
+      - /path/to/downloads:/downloads
+      - /path/to/data:/sync
+    ports:
+      - 8888:8888
+      - 55555:55555
+    restart: unless-stopped
+volumes:
+  plex-cluster-proxy:
+
