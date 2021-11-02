@@ -1,14 +1,13 @@
 #!/bin/bash
 
-docker pull elcrp96/plex-media-server
-docker pull elcrp96/plex-cluster-proxy
-#docker pull elcrp96/plex-cluster-manger
 
-if [[! -f ~/nginx/dhparam/dhparam-2048.pem]] then
-    if [[! -d ~/nginx/dhparam/ ]] then
-        mkdir -p ~/nginx/dhparam/
+if [ ! -f /storage/local/dhparam/dhparam-2048.pem ]; then
+    if [ ! -d /storage/local/dhparam ]; then
+        mkdir -p /storage/local/dhparam/
     fi
-    openssl dhparam -out ~/nginx/dhparam/dhparam-2048.pem 2048
+    openssl dhparam -out /storage/local/dhparam/dhparam-2048.pem 2048
 fi
 
-docker
+docker-compose pull --no-parallel
+docker-compose up -d
+
