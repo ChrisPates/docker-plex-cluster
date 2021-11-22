@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+
+  # A proxy based on nginx that sits between the Plex server and
+  # the internet. Every time a request is made to Plex, if that
+  # request is to mark status, an API call is made
+  # to plex-cluster-manager.
+  #
+  # There is one of these for every Plex server.
+  plex-cluster-proxy:
+    image: plex-cluster-proxy
+    environment:
+      - PLEX_IP=127.0.0.01
+      - PLEX_PORT=32400
+      - HTTPS_HOST=blackrose.pates.me.uk
+      - HTTPS_PORT=32300
+      - RESOLVERS=192.168.0.1
+      - SSL_CERTIFICATE=/certs/fullchain.pem
+      - SSL_CERTIFICATE_KEY=/certs/privkey.pem
+      - CLUSTER_MANAGER=http://westlea.pates.me.uk:3400
+      - CLUSTER_MANAGER_TOKEN=JS6ynqTiczX9rv8g5n4W
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/storage/local/certs/nginx/fullchain.pem:/certs/fullchain.pem:ro
+      - /mnt/storage/local/certs/nginx/privkey.pem:/certs/privkey.pem:ro
+      - plex-cluster-proxy:/data
+      - /mnt/storage/local/dhparam/dhparam-2048.pem:/data/phparam.pem
+    ports:
+      - 32300:32300
+    restart: always
+    
+volumes:
+  plex-cluster-proxy:    
