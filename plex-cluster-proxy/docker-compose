@@ -42,7 +42,7 @@ services:
       - SSL_CERTIFICATE=/certs/fullchain.pem
       - SSL_CERTIFICATE_KEY=/certs/privkey.pem
       - CLUSTER_MANAGER=http://westlea.pates.me.uk:3400
-      - CLUSTER_MANAGER_TOKEN=JS6ynqTiczX9rv8g5n4W
+      - CLUSTER_MANAGER_TOKEN
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/storage/local/certs/nginx/fullchain.pem:/certs/fullchain.pem:ro
