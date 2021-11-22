@@ -1,7 +1,25 @@
 version: '3.7'
 
 services:
-
+  # A docker optimized instance of plex media server 
+  plex:
+    image: elcrp96/plex-media-server
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=999
+      - PGID=995
+      - VERSION=docker
+      - PLEX_CLAIM="" #optional
+    volumes:
+      - /mnt/storage/local/plex/config:/config # Where you want your Plex Library/Config folder to be
+      - /mnt/storage/local/plex/transcode:/transcode # A path for transcoding
+      - /mnt/storage/local/plex/transcode/Sync+:/config/Library/Application Support/Plex Media Server/Cache/Transcode/Sync+ # To keep sync transcoding in the transcode folder
+      - /mnt/storage/local/plex/transcode/Sync:/config/Library/Application Support/Plex Media Server/Cache/Transcode/Sync   # To keep sync transcoding in the transcode folder
+      - /mnt/storage/sync/media:/mnt/media # Media folder
+      - /mnt/storage/local/certs/plex/node.pfx:/certs/node.pfx:ro # Certificate File
+    restart: unless-stopped
+ 
   # A proxy based on nginx that sits between the Plex server and
   # the internet. Every time a request is made to Plex, if that
   # request is to mark status, an API call is made
@@ -9,9 +27,14 @@ services:
   #
   # There is one of these for every Plex server.
   plex-cluster-proxy:
-    image: plex-cluster-proxy
+    image: elcrp96/plex-cluster-proxy
+    container_name: plex-proxy
+    network_mode: host
+
     environment:
-      - PLEX_IP=127.0.0.01
+      - PUID=999
+      - PGID=995
+      - PLEX_IP=192.168.0.202
       - PLEX_PORT=32400
       - HTTPS_HOST=blackrose.pates.me.uk
       - HTTPS_PORT=32300
@@ -19,16 +42,16 @@ services:
       - SSL_CERTIFICATE=/certs/fullchain.pem
       - SSL_CERTIFICATE_KEY=/certs/privkey.pem
       - CLUSTER_MANAGER=http://westlea.pates.me.uk:3400
-      - CLUSTER_MANAGER_TOKEN=JS6ynqTiczX9rv8g5n4W
+      - CLUSTER_MANAGER_TOKEN
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/storage/local/certs/nginx/fullchain.pem:/certs/fullchain.pem:ro
       - /mnt/storage/local/certs/nginx/privkey.pem:/certs/privkey.pem:ro
       - plex-cluster-proxy:/data
-      - /mnt/storage/local/dhparam/dhparam-2048.pem:/data/phparam.pem
+      - /mnt/storage/local/dhparam/dhparam-2048.pem:/data/dhparam.pem
     ports:
       - 32300:32300
     restart: always
-    
+
 volumes:
-  plex-cluster-proxy:    
+  plex-cluster-proxy:
