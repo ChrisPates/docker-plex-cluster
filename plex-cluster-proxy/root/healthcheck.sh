@@ -1,5 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/sh -e
 
-tail -f /var/log/nginx/plex.log | while read -r LINE; do
-    curl -s -X POST -H 'Content-Type: application/json' ${CLUSTER_MANAGER}?token=${CLUSTER_MANAGER_TOKEN} -d "${LINE}" > /dev/null;
-done
+TARGET=localhost
+CURL_OPTS="--connect-timeout 15 --max-time 100 --silent --show-error --fail"
+
+curl ${CURL_OPTS} "http://${TARGET}:${HTTPS_PORT}/identity" >/dev/null
+

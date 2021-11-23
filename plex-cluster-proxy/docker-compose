@@ -35,12 +35,6 @@ services:
       - PUID=999
       - PGID=995
       - PLEX_IP=192.168.0.202
-      - PLEX_PORT=32400
-      - HTTPS_HOST=blackrose.pates.me.uk
-      - HTTPS_PORT=32300
-      - RESOLVERS=192.168.0.1
-      - SSL_CERTIFICATE=/certs/fullchain.pem
-      - SSL_CERTIFICATE_KEY=/certs/privkey.pem
       - CLUSTER_MANAGER=http://westlea.pates.me.uk:3400
       - CLUSTER_MANAGER_TOKEN
     volumes:

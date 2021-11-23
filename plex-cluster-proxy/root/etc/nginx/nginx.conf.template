@@ -17,27 +17,15 @@ http {
 		'"identifier":"$identifier",'
 		'"status":"$status"'
 	'}';
-	# For debugging
-	#log_format json-log escape=json '{'
-	#	'"remote_addr":"$remote_addr",'	
-	#	'"proxy_add_x_forwarded_for":"$proxy_add_x_forwarded_for",'
-	#	'"request_headers":"$request_headers",'	
-	#	'"host":"$http_host",'
-	#	'"method":"$request_method",'
-	#	'"uri":"$request_uri",'
-	#	'"token":"$token",'
-	#	'"identifier":"$identifier",'
-	#	'"status":"$status"'
-	#'}';
 
 	# Upstream to Plex
 	upstream plex_backend {
-		server ${PLEX_IP}:${PLEX_PORT};
+		server ${PLEX_IP}:32400;
 		keepalive 32;
 	}
 
 	server {
-		listen ${HTTPS_PORT} ssl http2;
+		listen 32300 ssl http2;
 		server_name ${HTTPS_HOST};
 
 		# For debugging
@@ -55,8 +43,8 @@ http {
 		resolver ${RESOLVERS} valid=300s;
 		resolver_timeout 10s;
 
-		ssl_certificate ${SSL_CERTIFICATE};
-		ssl_certificate_key ${SSL_CERTIFICATE_KEY};
+		ssl_certificate /certs/fullchain.pem
+		ssl_certificate_key /certs/privkey.pem
 
 		ssl_session_cache shared:SSL:10m;
 		ssl_session_timeout 10m;

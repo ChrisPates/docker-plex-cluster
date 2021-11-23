@@ -30,5 +30,4 @@ COPY root/ /
 EXPOSE 32300 
 
 ENTRYPOINT ["/init"]
-HEALTHCHECK --interval=5s --timeout=2s --retries=20 CMD /healthcheck.sh || exit 1
-
+HEALTHCHECK NONE
