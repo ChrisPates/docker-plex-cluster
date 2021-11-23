@@ -4,8 +4,17 @@ echo "Starting Plex Cluster Proxy (nginx)."
 
 set -eu
 
-envsubst '${PLEX_IP} ${PLEX_PORT} ${HTTPS_HOST} ${HTTPS_PORT} ${RESOLVERS} ${SSL_CERTIFICATE} ${SSL_CERTIFICATE_KEY}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+if pgrep -f "[n]ginx:" > /dev/null; then
+    echo "Zombie nginx processes detected, sending SIGTERM"
+    pkill -ef [n]ginx:
+    sleep 1
+fi
 
+if pgrep -f "[n]ginx:" > /dev/null; then
+    echo "Zombie nginx processes still active, sending SIGKILL"
+    pkill -9 -ef [n]ginx:
+    sleep 1
+fi
 
-nginx -g "daemon off;" 
+exec /usr/sbin/nginx -c /config/nginx/nginx.conf
 
