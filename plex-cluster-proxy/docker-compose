@@ -17,7 +17,7 @@ services:
       - /mnt/storage/local/plex/transcode/Sync+:/config/Library/Application Support/Plex Media Server/Cache/Transcode/Sync+ # To keep sync transcoding in the transcode folder
       - /mnt/storage/local/plex/transcode/Sync:/config/Library/Application Support/Plex Media Server/Cache/Transcode/Sync   # To keep sync transcoding in the transcode folder
       - /mnt/storage/sync/media:/mnt/media # Media folder
-      - /mnt/storage/local/certs/plex/node.pfx:/certs/node.pfx:ro # Certificate File
+      - /mnt/storage/local/plex/certs:/certs:ro # Certificate File
     restart: unless-stopped
  
   # A proxy based on nginx that sits between the Plex server and
