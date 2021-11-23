@@ -39,7 +39,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/storage/local/plex-proxy/certs:/certs:ro
-      - /mnt/storage/local/plex-proxy/config/nginx.conf:/etc/nginx/nginx.conf
+      - /mnt/storage/local/plex-proxy/config/nginx.conf:/config/nginx/nginx.conf
       - /mnt/storage/local/plex-proxy/dhparam/dhparam-2048.pem:/data/dhparam.pem
       - /mnt/storage/local/plex-proxy/logs:/var/log/nginx
     ports:
